@@ -34,8 +34,8 @@ namespace Avengers_vs_Invaders.Helper
             Roles.Add(new Role() { Id = (int)RollEnum.defense_role, Name = RollEnum.defense_role.ToString() });
             Roles.Add(new Role() { Id = (int)RollEnum.healing_role, Name = RollEnum.healing_role.ToString() });
 
-            Invaders.Add(new Invader() { Id = 1, Name = "aliens" });
-            Invaders.Add(new Invader() { Id = 2, Name = "predators" });
+            Invaders.Add(new Invader() { Id = 1, GroupName = "Aliens", Name = "aliens" });
+            Invaders.Add(new Invader() { Id = 2, GroupName = "Predators", Name = "predators" });
             Invaders.Add(new Invader() { Id = 3, GroupName = "D&D Monsters", Name = "d&d_beholder" });
             Invaders.Add(new Invader() { Id = 4, GroupName = "D&D Monsters", Name = "d&d_devil" });
             Invaders.Add(new Invader() { Id = 5, GroupName = "D&D Monsters", Name = "d&d_lich" });
@@ -175,5 +175,7 @@ namespace Avengers_vs_Invaders.Helper
 
             return max+1;
         }
+
+
     }
 }

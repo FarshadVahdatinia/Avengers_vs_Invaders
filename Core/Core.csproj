@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DataGridView-AutoFilter" Version="1.1.0" />
+    <PackageReference Include="Markdown" Version="2.2.1" />
+    <PackageReference Include="MarkdownLog" Version="0.9.64" />
+  </ItemGroup>
+
 </Project>

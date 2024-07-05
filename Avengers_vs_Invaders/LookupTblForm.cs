@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -17,26 +18,80 @@ namespace Avengers_vs_Invaders
         public LookupTblForm()
         {
             InitializeComponent();
-            FillDate();
+            FillData();
+            GetCountries();
+            GetRoles();
+            GetInvaders();
         }
 
-        private void FillDate()
+        private void FillData()
         {
-            var lookup = FetchData.HeadQuarterHeroInvaders
-                   .Join(FetchData.CountryHeadQuarterInvaders, x => x.HeadQuarterId, y => y.HeadQuarterId, (x, y) => new { headQuarter = x, countryInvader = y })
-                   .Join(FetchData.Countries, h => h.countryInvader.CountryId, c => c.Id, (h, c) => new { h.headQuarter, h.countryInvader, country = c })
-                   .Join(FetchData.Invaders, h => h.countryInvader.InvaderId, c => c.Id, (h, c) => new { h.headQuarter, h.countryInvader, h.country, invader = c })
-                   .Join(FetchData.Roles, h => h.headQuarter.RoleId, c => c.Id, (h, c) => new { h.headQuarter, h.countryInvader, h.country, h.invader, role = c })
-                   .Join(FetchData.Heroes, h => h.headQuarter.HeroId, c => c.Id, (h, c) => new { h.headQuarter, h.countryInvader, h.country, h.invader, h.role, hero = c })
-                   .Where(x=>!string.IsNullOrEmpty(x.hero.Email));
-            var showTbl = lookup.ToList().Select(x => new Task1()
-            {
-                Country = x.country.Code,
-                InvaderSpecies = x.invader.Name,
-                RoleSpecific = x.role.Name,
-                AvengerEmail = x.hero.Email
-            }).ToList();
+            var showTbl = DataTablesHelper.GetLookupTblData();
+            if (!string.IsNullOrEmpty(countriesComboBox.SelectedItem?.ToString()))
+                showTbl = showTbl.Where(x => x.Country == countriesComboBox.SelectedItem?.ToString()).ToList();
+            if (!string.IsNullOrEmpty(roleComboBox.SelectedItem?.ToString()))
+                showTbl = showTbl.Where(x => x.RoleSpecific == roleComboBox.SelectedItem?.ToString()).ToList();
+            if (!string.IsNullOrEmpty(invaderComboBox.SelectedItem?.ToString()))
+                showTbl = showTbl.Where(x => x.InvaderSpecies == invaderComboBox.SelectedItem?.ToString()).ToList();
+            if (!string.IsNullOrEmpty(emailTextBox.Text?.ToString()))
+                showTbl = showTbl.Where(x => x.AvengerEmail.ToLower().Contains(emailTextBox.Text.ToString().ToLower())).ToList();
             dataGridView1.DataSource = showTbl;
+        }
+
+        private void GetCountries()
+        {
+            var counrties = FetchData.Countries;
+            string[] the_array = new string[counrties.Count + 1];
+            for (var i = 1; i < counrties.Count + 1; ++i)
+                the_array[i] = counrties[i - 1].Code.ToString();
+            the_array[0] = "";
+            countriesComboBox.Items.AddRange(the_array);
+        }
+        private void GetRoles()
+        {
+            var roles = FetchData.Roles;
+            string[] the_array = new string[roles.Count + 1];
+            for (var i = 1; i < roles.Count + 1; ++i)
+                the_array[i] = roles[i - 1].Name.ToString();
+            the_array[0] = "";
+            roleComboBox.Items.AddRange(the_array);
+        }
+        private void GetInvaders()
+        {
+            var invaders = FetchData.Invaders.DistinctBy(x=>x.GroupName).ToList();
+            string[] the_array = new string[invaders.Count + 1];
+            for (var i = 1; i < invaders.Count + 1; ++i)
+                the_array[i] = invaders[i - 1].GroupName.ToString();
+            the_array[0] = "";
+            invaderComboBox.Items.AddRange(the_array);
+        }
+        private void countriesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillData();
+        }
+
+        private void roleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillData();
+        }
+
+        private void invaderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillData();
+        }
+
+        private void emaiTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            FillData();
+        }
+
+        private void resetBtn_Click(object sender, EventArgs e)
+        {
+            countriesComboBox.SelectedIndex = 0;
+            roleComboBox.SelectedIndex = 0;
+            invaderComboBox.SelectedIndex = 0;
+            emailTextBox.Text = "";
+            FillData();
         }
     }
 }

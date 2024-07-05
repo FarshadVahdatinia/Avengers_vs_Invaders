@@ -9,7 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DataGridView-AutoFilter" Version="1.1.0" />
     <PackageReference Include="EPPlus" Version="7.2.1" />
+    <PackageReference Include="Markdig" Version="0.37.0" />
+    <PackageReference Include="MarkdownLog" Version="0.9.64" />
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
   </ItemGroup>
 
@@ -30,6 +33,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MDFiles\" />
   </ItemGroup>
 
 </Project>
